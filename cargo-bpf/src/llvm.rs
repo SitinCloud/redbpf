@@ -20,8 +20,8 @@ and then calls LLVM API directly to parse and optimize the emitted bitcode
 second.
 */
 cfg_if::cfg_if! {
-    if #[cfg(feature = "llvm-sys-130")] {
-        use llvm_sys_130 as llvm_sys;
+    if #[cfg(feature = "llvm-sys-150")] {
+        use llvm_sys_150 as llvm_sys;
     } else {
         compile_error!("Specify --features llvm13");
     }
@@ -122,6 +122,8 @@ unsafe fn inject_exit_call(context: LLVMContextRef, func: LLVMValueRef, builder:
     LLVMPositionBuilderBefore(builder, last);
     let c_str = CString::new("").unwrap();
     LLVMBuildCall(builder, exit, ptr::null_mut(), 0, c_str.as_ptr());
+
+    //LLVMBuildCall2(builder, exit_sig, exit, ptr::null_mut(), 0, c_str.as_ptr());
 }
 
 /// Find debugger intrinsics handling methods of RedBPF maps. The the type
